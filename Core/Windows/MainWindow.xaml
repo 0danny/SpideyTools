@@ -1,0 +1,35 @@
+﻿<mah:MetroWindow  
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls" x:Class="SpideyTools.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SpideyTools"
+        Title="{Binding viewModel.WindowTitle, Mode=OneWay}"
+        d:DataContext="{d:DesignInstance local:MainWindow,IsDesignTimeCreatable=True}"
+        mc:Ignorable="d"
+        ResizeMode="CanMinimize" 
+        Height="295" 
+        Width="459">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="90*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+
+        <mah:MetroAnimatedTabControl Grid.Row="0">
+            <TabItem Header="Modifications">
+                <StackPanel Orientation="Vertical" Margin="5">
+                    <Button Content="Kill Game" Command="{Binding viewModel.killGameCommand, Mode=OneWay}" />
+                </StackPanel>
+            </TabItem>
+        </mah:MetroAnimatedTabControl>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{DynamicResource MahApps.Brushes.Accent}">
+            <Label Content="Process: "></Label>
+
+            <Label Content="{Binding viewModel.ProcessStatus}" FontWeight="Bold" Foreground="{Binding viewModel.ProcessStatusColor}"></Label>
+        </StackPanel>
+    </Grid>
+</mah:MetroWindow>
