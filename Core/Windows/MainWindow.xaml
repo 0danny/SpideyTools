@@ -5,23 +5,46 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SpideyTools"
+        BorderThickness="0"
         Title="{Binding viewModel.WindowTitle, Mode=OneWay}"
         d:DataContext="{d:DesignInstance local:MainWindow,IsDesignTimeCreatable=True}"
         mc:Ignorable="d"
-        ResizeMode="CanMinimize" 
-        Height="295" 
-        Width="459">
-    
+        Width="520" Height="336">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="90*"/>
-            <RowDefinition Height="10*"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <mah:MetroAnimatedTabControl Grid.Row="0">
             <TabItem Header="Modifications">
                 <StackPanel Orientation="Vertical" Margin="5">
-                    <Button Content="Kill Game" Command="{Binding viewModel.killGameCommand, Mode=OneWay}" />
+
+                    <GroupBox Header="Controls" Margin="0,0,0,5">
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <Button Content="Kill Game" Command="{Binding viewModel.killGameCommand, Mode=OneWay}" />
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox Header="Characters">
+                        <StackPanel Orientation="Vertical">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50*"/>
+                                    <ColumnDefinition Width="50*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <ComboBox ItemsSource="{Binding viewModel.CharacterMods}" DisplayMemberPath="Name" SelectedIndex="0" Grid.Column="0" Margin="0,0,5,0" SelectedItem="{Binding viewModel.SelectedCharacter}"/>
+                                <Button Content="Use Character" Command="{Binding viewModel.useCharacterCommand, Mode=OneWay}" Grid.Column="1"/>
+                            </Grid>
+
+                            <Label HorizontalAlignment="Center" Content="Only use before loading into a game."></Label>
+                        </StackPanel>
+                      
+
+                    </GroupBox>
+
                 </StackPanel>
             </TabItem>
         </mah:MetroAnimatedTabControl>

@@ -7,6 +7,7 @@ using System.Windows.Threading;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SpideyTools.Core;
 using SpideyTools.Core.ViewModels;
 
 namespace SpideyTools
@@ -21,6 +22,7 @@ namespace SpideyTools
 
                services.AddScoped<WindowVM>();
                services.AddSingleton<MainWindow>();
+               services.AddSingleton<Memory>();
            }).Build();
 
         private async void OnStartup(object sender, StartupEventArgs e)
@@ -37,7 +39,7 @@ namespace SpideyTools
         {
             using (_host)
             {
-                await _host.StopAsync(TimeSpan.FromSeconds(5));
+                await _host.StopAsync();
             }
         }
 

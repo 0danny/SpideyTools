@@ -12,16 +12,30 @@ namespace SpideyTools.Core
 {
     public class ProcessHandler
     {
+        public delegate void CallbackFunc(bool state);
+        public CallbackFunc? callback;
+
         public static string exeName = "SpiderMan";
 
         public static IntPtr gameProcess { get; private set; }
-        public static Process? process { get; private set; }
+        public static Process? process { get; set; }
 
         //Private
         private Thread? scanThread { get; set; }
         private int scanInterval = 2000;
+
         private bool scanning = true;
         private bool shouldRefresh = true;
+
+        public static bool processAlive()
+        {
+            return process != null;
+        }
+
+        public int getProcessID()
+        {
+            return process == null ? -1 : process.Id;
+        }
 
         //Thread for scanning if Spiderman.exe is open.
         public void startScan()
@@ -30,12 +44,13 @@ namespace SpideyTools.Core
 
             scanThread.IsBackground = true;
             scanThread.Name = "Scanning Thread";
+
             scanThread.Start();
         }
 
         public void killProcess()
         {
-            if(process != null && shouldRefresh == false)
+            if (process != null && shouldRefresh == false)
             {
                 process.Kill();
             }
@@ -44,9 +59,14 @@ namespace SpideyTools.Core
         public void stopScan()
         {
             scanning = false;
+
+            if (scanThread != null)
+            {
+                scanThread.Join();
+            }
         }
 
-        public Process? getProcessID()
+        public Process? getProcess()
         {
             //Process list.
             Process[] process = Process.GetProcessesByName(exeName);
@@ -63,7 +83,7 @@ namespace SpideyTools.Core
         {
             while (scanning)
             {
-                process = getProcessID();
+                process = getProcess();
 
                 Logger.Log($"Scanning for process....");
 
@@ -75,24 +95,15 @@ namespace SpideyTools.Core
                     shouldRefresh = false;
 
                     Logger.Log($"Found process -> {process.Id} -> {gameProcess}");
-
-                    /*
-                    MainWindow.instance.Dispatcher.Invoke(() =>
-                    {
-                    MainWindow.instance.main_processStatus.Content = $"Found({procID} - SpiderMan.exe)";
-                        MainWindow.instance.main_processStatus.Foreground = Brushes.LightGreen;
-                    });*/
                 }
                 else if (process == null)
                 {
                     shouldRefresh = true;
+                }
 
-                    /*
-                    MainWindow.instance.Dispatcher.Invoke(() =>
-                    {
-                    MainWindow.instance.main_processStatus.Content = $"Not Found";
-                    MainWindow.instance.main_processStatus.Foreground = Brushes.White;
-                    }); */
+                if (callback != null)
+                {
+                    callback(!shouldRefresh);
                 }
 
                 Thread.Sleep(scanInterval);
