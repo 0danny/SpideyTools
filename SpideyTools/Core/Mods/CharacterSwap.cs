@@ -48,6 +48,8 @@ namespace SpideyTools.Core.Mods
             {
                 case "plrrossgoblin":
                     //OPEN THE GATES FOR ALEX ROSS GREEN GOBLIN.
+                    revertSwap();
+                    
                     Memory.patchInt(0x008CFDD4, 0);
                     break;
                 case "original":

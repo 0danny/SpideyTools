@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{d66d260c-18bb-41c8-9ad8-077c7530fbf7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\pipe">
+      <UniqueIdentifier>{bcf794a6-8b8a-44cf-afec-36783d83e299}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mods">
+      <UniqueIdentifier>{de0872cc-eca0-4ea0-a3fd-3acc7bdb19cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\models">
+      <UniqueIdentifier>{0982c9e0-f630-42bb-9df6-d928550f6379}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="spideyPipe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="comms.cpp">
+      <Filter>Source Files\pipe</Filter>
+    </ClCompile>
+    <ClCompile Include="characterSwap.cpp">
+      <Filter>Source Files\mods</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="spideyPipe.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="logger.h">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="comms.h">
+      <Filter>Source Files\pipe</Filter>
+    </ClInclude>
+    <ClInclude Include="characterSwap.h">
+      <Filter>Source Files\mods</Filter>
+    </ClInclude>
+    <ClInclude Include="module.h">
+      <Filter>Source Files\models</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

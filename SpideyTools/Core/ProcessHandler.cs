@@ -27,6 +27,9 @@ namespace SpideyTools.Core
         private bool scanning = true;
         private bool shouldRefresh = true;
 
+        //Injector
+        private Injector injector = new();
+
         public static bool processAlive()
         {
             return process != null;
@@ -40,6 +43,8 @@ namespace SpideyTools.Core
         //Thread for scanning if Spiderman.exe is open.
         public void startScan()
         {
+            injector.init();
+
             scanThread = new Thread(new ThreadStart(scanMethod));
 
             scanThread.IsBackground = true;
@@ -90,9 +95,11 @@ namespace SpideyTools.Core
                 if (process != null && shouldRefresh == true)
                 {
                     //Get a handle to the process
-                    gameProcess = Natives.OpenProcess(Natives.PROCESS_VM_READ | Natives.PROCESS_VM_WRITE | Natives.PROCESS_VM_OPERATION, false, process.Id);
+                    gameProcess = Natives.OpenProcess((int)Natives.PROCESS_ALL_ACCESS, false, process.Id);
 
                     shouldRefresh = false;
+
+                    injector.inject();
 
                     Logger.Log($"Found process -> {process.Id} -> {gameProcess}");
                 }
