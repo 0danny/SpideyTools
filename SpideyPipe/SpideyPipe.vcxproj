@@ -76,7 +76,7 @@
     <LibraryPath>C:\Users\Daniel Paolone\Desktop\Spiderman RE\SpideyTools\SpideyPipe\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\SpideyTools\bin\$(Configuration)\net6.0-windows\</OutDir>
+    <OutDir>$(Configuration)\</OutDir>
     <IncludePath>C:\Users\Daniel Paolone\Desktop\Spiderman RE\SpideyTools\SpideyPipe\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Daniel Paolone\Desktop\Spiderman RE\SpideyTools\SpideyPipe\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -97,7 +97,7 @@
       <EnableUAC>false</EnableUAC>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(SolutionDir)\SpideyTools\bin\x86\$(Configuration)\net6.0-windows\"</Command>
+      <Command>copy "$(TargetPath)" "$(SolutionDir)\SpideyTools\bin\x86\$(Configuration)\net6.0-windows\win-x86"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copy the SpideyPipe.dll to SpideyTools build folder.</Message>
@@ -123,6 +123,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
     </Link>
+    <PostBuildEvent>
+      <Command>copy "$(TargetPath)" "$(SolutionDir)\SpideyTools\bin\x86\$(Configuration)\net6.0-windows\win-x86"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

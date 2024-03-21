@@ -43,6 +43,9 @@ namespace SpideyTools.Core
         //Thread for scanning if Spiderman.exe is open.
         public void startScan()
         {
+            //Enable debug privs
+            Natives.EnableDebugPriv();
+
             injector.init();
 
             scanThread = new Thread(new ThreadStart(scanMethod));
@@ -86,11 +89,11 @@ namespace SpideyTools.Core
 
         public void scanMethod()
         {
+            Logger.Log($"Scanning for process....");
+
             while (scanning)
             {
                 process = getProcess();
-
-                Logger.Log($"Scanning for process....");
 
                 if (process != null && shouldRefresh == true)
                 {
@@ -102,15 +105,20 @@ namespace SpideyTools.Core
                     injector.inject();
 
                     Logger.Log($"Found process -> {process.Id} -> {gameProcess}");
+
+                    if (callback != null)
+                    {
+                        callback(true);
+                    }
                 }
                 else if (process == null)
                 {
                     shouldRefresh = true;
-                }
 
-                if (callback != null)
-                {
-                    callback(!shouldRefresh);
+                    if (callback != null)
+                    {
+                        callback(false);
+                    }
                 }
 
                 Thread.Sleep(scanInterval);

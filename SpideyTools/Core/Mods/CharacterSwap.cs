@@ -19,28 +19,22 @@ namespace SpideyTools.Core.Mods
         public ObservableCollection<CharacterMod> characterMods = new()
         {
             new CharacterMod { Name = "Original", Address = 0x0, InternalName = "original" },
-            new CharacterMod { Name = "Alex Ross Green Goblin", Address = 0x008C60E4, InternalName = "plrrossgoblin" },
-            new CharacterMod { Name = "MJ Spidey", Address = 0x008C6170, InternalName = "mjspidey" },
-            new CharacterMod { Name = "Spidey Wrestle", Address = 0x008C619C, InternalName = "spideywrestle" },
             new CharacterMod { Name = "Peter Student", Address = 0x008C618C, InternalName = "peterstudent" },
             new CharacterMod { Name = "Ross Spidey", Address = 0x008C617C, InternalName = "rossspidey" },
-            new CharacterMod { Name = "Shock Spidey", Address = 0x008C6160, InternalName = "shockspidey" },
-            new CharacterMod { Name = "Sci Spidey", Address = 0x008C6154, InternalName = "scispidey" },
-            new CharacterMod { Name = "Thug Spidey", Address = 0x008C6144, InternalName = "thugspidey" },
-            new CharacterMod { Name = "BTG Spidey", Address = 0x008C6138, InternalName = "btgspidey" },
-            new CharacterMod { Name = "STH Spidey", Address = 0x008C612C, InternalName = "sthspidey" },
-            new CharacterMod { Name = "Freak Spidey", Address = 0x008C611C, InternalName = "freakspidey" },
+            new CharacterMod { Name = "Spider-Man", Address = 0x008D0398, InternalName = "spiderman" },
+            new CharacterMod { Name = "Spidey Wrestle", Address = 0x008C619C, InternalName = "spideywrestle" },
+            new CharacterMod { Name = "Btg Spidey", Address = 0x008C6138, InternalName = "btgspidey" },
             new CharacterMod { Name = "Cop Spidey", Address = 0x008C6110, InternalName = "copspidey" },
+            new CharacterMod { Name = "Freak Spidey", Address = 0x008C611C, InternalName = "freakspidey" },
             new CharacterMod { Name = "Heli Spidey", Address = 0x008C6100, InternalName = "helispidey" },
-            new CharacterMod { Name = "Green Goblin", Address = 0x008C60F4, InternalName = "plrgoblin" },
+            new CharacterMod { Name = "Mj Spidey", Address = 0x008C6170, InternalName = "mjspidey" },
+            new CharacterMod { Name = "Sci Spidey", Address = 0x008C6154, InternalName = "scispidey" },
+            new CharacterMod { Name = "Shock Spidey", Address = 0x008C6160, InternalName = "shockspidey" },
+            new CharacterMod { Name = "Sth Spidey", Address = 0x008C612C, InternalName = "sthspidey" },
+            new CharacterMod { Name = "Thug Spidey", Address = 0x008C6144, InternalName = "thugspidey" },
+            new CharacterMod { Name = "Goblin", Address = 0x008C60F4, InternalName = "plrgoblin" },
+            new CharacterMod { Name = "Ross Goblin", Address = 0x008C60E4, InternalName = "plrrossgoblin" },
         };
-
-        /* Game currently crashes when clicking exit in the menu, when using character mod. 
-            -> This is because the func we are patching is used twice and obviously the game doesn't like it.
-            -> Works if you revert patch before clicking exit.
-            -> Need to find another instruction to patch.
-            -> Could hook exit method, or other method.
-         */
 
         public void swap(string characterName)
         {

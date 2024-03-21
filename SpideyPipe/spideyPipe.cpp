@@ -9,7 +9,7 @@ namespace main
 			setConsole();
 		}
 
-		utils::logger::log("Spidey Pipe injected.");
+		utils::logger::log("Spidey Pipe injected -> ", GetLastError());
 
 		//init MinHook.
 		if (MH_Initialize() != MH_OK) {
@@ -22,7 +22,6 @@ namespace main
 		//Enable all minhooks
 		if (MH_EnableHook(MH_ALL_HOOKS) != MH_OK) {
 			utils::logger::log("Failed to enable all hooks.");
-			return;
 		}
 
 		comms.start();

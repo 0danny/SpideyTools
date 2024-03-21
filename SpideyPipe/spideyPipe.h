@@ -5,16 +5,15 @@
 #include <iostream>
 #include <cstdio>
 #include <ios>
+#include <vector>
 
-#pragma comment(lib, "libMinHook-x86-v141-mtd.lib")
+#pragma comment(lib, "libMinHook-x86.lib")
 #include "MinHook.h"
 
 #include "logger.h"
 #include "comms.h"
 #include "module.h"
-
 #include "characterSwap.h"
-#include <vector>
 
 namespace main
 {

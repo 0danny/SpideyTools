@@ -23,13 +23,20 @@ namespace SpideyTools
         {
             get;
         }
-   
+
         public MainWindow(WindowVM _viewModel)
         {
             viewModel = _viewModel;
             DataContext = this;
 
             InitializeComponent();
+
+            Closing += MainWindow_Closing;
+        }
+
+        private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            viewModel.windowClosing();
         }
     }
 }

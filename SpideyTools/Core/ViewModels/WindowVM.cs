@@ -5,6 +5,7 @@ using SpideyTools.Core.Models;
 using SpideyTools.Core.Mods;
 using System;
 using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -19,6 +20,7 @@ namespace SpideyTools.Core.ViewModels
 
         //Mod Instances
         private readonly CharacterSwap characterSwap = new();
+        private readonly WindowSize windowSize = new();
 
         //Window
         [ObservableProperty]
@@ -30,15 +32,29 @@ namespace SpideyTools.Core.ViewModels
         [ObservableProperty]
         private SolidColorBrush processStatusColor = Brushes.Red;
 
-        //Modifications
+        //Debug Window
+        [ObservableProperty]
+        public ObservableCollection<string> debugs = new();
+
+        /* Modifications */
         [ObservableProperty]
         private ObservableCollection<CharacterMod> characterMods;
 
         [ObservableProperty]
         private CharacterMod? selectedCharacter;
 
+        //Size
+        [ObservableProperty]
+        private int windowHeight = 720;
+
+        [ObservableProperty]
+        private int windowWidth = 1280;
+
         public WindowVM()
         {
+            //This is bad
+            Logger.debugs = Debugs;
+
             Logger.Log($"SpideyTools started -> v{version}");
             windowTitle = $"SpideyTools - v{version} - dan";
 
@@ -48,14 +64,19 @@ namespace SpideyTools.Core.ViewModels
             procHandler.startScan();
         }
 
+        public void windowClosing()
+        {
+            procHandler.stopScan();
+        }
+
         public void processHandlerCallback(bool state)
         {
-            Logger.Log($"Callback {state}");
-
             if (state)
             {
                 ProcessStatus = $"Found({procHandler.getProcessID()} - SpiderMan.exe)";
                 ProcessStatusColor = Brushes.LightGreen;
+
+                windowSize.changeSize(1280, 720);
             }
             else
             {
@@ -74,9 +95,17 @@ namespace SpideyTools.Core.ViewModels
         }
 
         [RelayCommand]
+        public void setResolution()
+        {
+            Logger.Log($"Setting resolution to {WindowWidth} by {WindowHeight}");
+
+            windowSize.changeSize(WindowWidth, WindowHeight);
+        }
+
+        [RelayCommand]
         public void useCharacter()
         {
-            if(SelectedCharacter != null)
+            if (SelectedCharacter != null)
             {
                 Logger.Log($"Changing to character -> {SelectedCharacter.InternalName}");
 
