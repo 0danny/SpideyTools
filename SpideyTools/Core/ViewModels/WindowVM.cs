@@ -1,13 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SpideyTools.Core.Configuration;
 using SpideyTools.Core.Helper;
 using SpideyTools.Core.Models;
 using SpideyTools.Core.Mods;
-using System;
 using System.Collections.ObjectModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace SpideyTools.Core.ViewModels
@@ -17,6 +14,7 @@ namespace SpideyTools.Core.ViewModels
         //Class Variables
         private readonly string version = "0.1";
         private readonly ProcessHandler procHandler = new();
+        private readonly ConfigLoader configLoader = new();
 
         //Mod Instances
         private readonly CharacterSwap characterSwap = new();
@@ -45,42 +43,52 @@ namespace SpideyTools.Core.ViewModels
 
         //Size
         [ObservableProperty]
-        private int windowHeight = 720;
+        private int windowHeight = 600;
 
         [ObservableProperty]
-        private int windowWidth = 1280;
+        private int windowWidth = 800;
+
+        [ObservableProperty]
+        private string gamePathBox = "Unknown.";
 
         public WindowVM()
         {
             //This is bad
             Logger.debugs = Debugs;
-
             Logger.Log($"SpideyTools started -> v{version}");
             windowTitle = $"SpideyTools - v{version} - dan";
+
+            configLoader.load();
+            populateSettings();
 
             characterMods = characterSwap.characterMods;
 
             procHandler.callback = processHandlerCallback;
-            procHandler.startScan();
+            procHandler.init();
+        }
+
+        public void populateSettings()
+        {
+            GamePathBox = ConfigLoader.model.gamePath;
         }
 
         public void windowClosing()
         {
-            procHandler.stopScan();
+            configLoader.update();
         }
 
         public void processHandlerCallback(bool state)
         {
             if (state)
             {
-                ProcessStatus = $"Found({procHandler.getProcessID()} - SpiderMan.exe)";
+                ProcessStatus = $"Locked({procHandler.getProcessID()})";
                 ProcessStatusColor = Brushes.LightGreen;
 
-                windowSize.changeSize(1280, 720);
+                windowSize.changeSize(800, 600);
             }
             else
             {
-                ProcessStatus = $"Not Found";
+                ProcessStatus = $"Not Started";
                 ProcessStatusColor = Brushes.White;
             }
         }
@@ -92,6 +100,22 @@ namespace SpideyTools.Core.ViewModels
             Logger.Log("Killing the game.");
 
             procHandler.killProcess();
+        }
+
+        [RelayCommand]
+        public void startGame()
+        {
+            Logger.Log("Starting the game.");
+
+            procHandler.startProcess();
+        }
+
+        [RelayCommand]
+        public void setPath()
+        {
+            configLoader.pickPath();
+
+            GamePathBox = ConfigLoader.model.gamePath;
         }
 
         [RelayCommand]
@@ -111,7 +135,7 @@ namespace SpideyTools.Core.ViewModels
 
                 characterSwap.swap(SelectedCharacter.InternalName);
 
-                MessageBox.Show("Successfully patched character.", "SpideyTools");
+                Dialogs.Show("Successfully patched character.");
             }
         }
     }

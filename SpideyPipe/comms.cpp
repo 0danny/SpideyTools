@@ -2,9 +2,11 @@
 
 namespace pipe
 {
-	void comms::start()
+	void comms::start(commsCallback cmsCallback)
 	{
 		utils::logger::log("Starting the comms.");
+
+		this->cmsCallback = cmsCallback;
 
 		//Start the thread;
 		commsThread = std::thread([this] { this->listen(); });
@@ -58,6 +60,7 @@ namespace pipe
 						utils::logger::log("Message received from client: ", buffer);
 
 						//Do something with message.
+						cmsCallback(std::string(buffer));
 					}
 				}
 				else

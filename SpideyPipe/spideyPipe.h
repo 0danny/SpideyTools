@@ -15,6 +15,12 @@
 #include "module.h"
 #include "characterSwap.h"
 
+struct test {
+	int unkInt1 = 1;
+	int unkInt2 = 1;
+	int unkInt3 = 1;
+};
+
 namespace main
 {
 	class spideyPipe
@@ -32,6 +38,8 @@ namespace main
 
 		void loadMods();
 		void initMods();
+
+		static void commsCallback(std::string message);
 	};
 }
 

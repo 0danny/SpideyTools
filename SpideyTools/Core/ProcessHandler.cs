@@ -1,4 +1,5 @@
-﻿using SpideyTools.Core.Helper;
+﻿using SpideyTools.Core.Configuration;
+using SpideyTools.Core.Helper;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Threading;
+using static SpideyTools.Core.Helper.Natives;
 
 namespace SpideyTools.Core
 {
@@ -18,59 +20,40 @@ namespace SpideyTools.Core
         public static string exeName = "SpiderMan";
 
         public static IntPtr gameProcess { get; private set; }
-        public static Process? process { get; set; }
-
-        //Private
-        private Thread? scanThread { get; set; }
-        private int scanInterval = 2000;
-
-        private bool scanning = true;
-        private bool shouldRefresh = true;
+        public static STARTUPINFO startInfo = new();
+        public static PROCESS_INFORMATION processInfo = new();
 
         //Injector
         private Injector injector = new();
 
         public static bool processAlive()
         {
-            return process != null;
+            return gameProcess != IntPtr.Zero;
         }
 
         public int getProcessID()
         {
-            return process == null ? -1 : process.Id;
+            return processInfo.dwProcessId == 0 ? -1 : (int)processInfo.dwProcessId;
         }
 
         //Thread for scanning if Spiderman.exe is open.
-        public void startScan()
+        public void init()
         {
             //Enable debug privs
-            Natives.EnableDebugPriv();
+            EnableDebugPriv();
 
             injector.init();
-
-            scanThread = new Thread(new ThreadStart(scanMethod));
-
-            scanThread.IsBackground = true;
-            scanThread.Name = "Scanning Thread";
-
-            scanThread.Start();
         }
 
         public void killProcess()
         {
-            if (process != null && shouldRefresh == false)
+            if (gameProcess != IntPtr.Zero)
             {
-                process.Kill();
-            }
-        }
+                //Kill Process
+                Process? spiderProc = getProcess();
 
-        public void stopScan()
-        {
-            scanning = false;
-
-            if (scanThread != null)
-            {
-                scanThread.Join();
+                if (spiderProc != null)
+                    spiderProc.Kill();
             }
         }
 
@@ -87,42 +70,37 @@ namespace SpideyTools.Core
             return null;
         }
 
-        public void scanMethod()
+        public void startProcess()
         {
-            Logger.Log($"Scanning for process....");
+            string gamePath = @$"{ConfigLoader.model.gamePath}\{exeName}.exe";
 
-            while (scanning)
+            Logger.Log($"Launching game path -> {gamePath}");
+
+            bool result = CreateProcessA(gamePath, null, IntPtr.Zero, IntPtr.Zero, false, ProcessCreationFlags.CREATE_SUSPENDED, IntPtr.Zero, ConfigLoader.model.gamePath, ref startInfo, out processInfo);
+
+            if (result)
             {
-                process = getProcess();
+                Logger.Log("Process created successfully in suspended state.");
 
-                if (process != null && shouldRefresh == true)
-                {
-                    //Get a handle to the process
-                    gameProcess = Natives.OpenProcess((int)Natives.PROCESS_ALL_ACCESS, false, process.Id);
+                gameProcess = OpenProcess(PROCESS_ALL_ACCESS, false, (int)processInfo.dwProcessId);
 
-                    shouldRefresh = false;
+                Logger.Log($"Aquired game handle -> {gameProcess}");
 
-                    injector.inject();
+                injector.inject();
 
-                    Logger.Log($"Found process -> {process.Id} -> {gameProcess}");
+                ResumeThread(processInfo.hThread);
 
-                    if (callback != null)
-                    {
-                        callback(true);
-                    }
-                }
-                else if (process == null)
-                {
-                    shouldRefresh = true;
-
-                    if (callback != null)
-                    {
-                        callback(false);
-                    }
-                }
-
-                Thread.Sleep(scanInterval);
+                if(callback != null)
+                    callback(true);
             }
+            else
+            {
+                Logger.Log("Failed to create process.");
+
+                if (callback != null)
+                    callback(false);
+            }
+
         }
     }
 }

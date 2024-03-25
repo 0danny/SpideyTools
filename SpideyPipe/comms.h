@@ -4,6 +4,8 @@
 
 #include "logger.h"
 
+typedef void (*commsCallback)(std::string message);
+
 namespace pipe
 {
 	class comms
@@ -12,9 +14,10 @@ namespace pipe
 		const char* pipeName = "\\\\.\\pipe\\SpideyPipe";
 
 		std::thread commsThread;
+		commsCallback cmsCallback;
 
 	public:
-		void start();
+		void start(commsCallback cmsCallback);
 		void listen();
 		void cleanup();
 	};

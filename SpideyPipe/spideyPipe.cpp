@@ -24,7 +24,28 @@ namespace main
 			utils::logger::log("Failed to enable all hooks.");
 		}
 
-		comms.start();
+		comms.start(commsCallback);
+	}
+
+	void spideyPipe::commsCallback(std::string message)
+	{
+		//char __stdcall sub_4B1600(int a1, int a2)
+
+		/*
+		typedef char(__stdcall* Func)(test* a1);
+
+		Func func = (Func)(0x0052A610);
+
+		func(&testStruct);*/
+
+		//utils::logger::log("Result: ", result);
+		
+		/*
+		auto wideScreen = reinterpret_cast<int*>(0x00924DF0);
+
+		*wideScreen = 1;
+
+		utils::logger::log("Result: ", *wideScreen);*/
 	}
 
 	void spideyPipe::initMods()

@@ -124,7 +124,7 @@
       <EnableUAC>false</EnableUAC>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(SolutionDir)\SpideyTools\bin\x86\$(Configuration)\net6.0-windows\win-x86"</Command>
+      <Command>copy "$(TargetPath)" "$(SolutionDir)\SpideyTools\bin\$(Configuration)\net6.0-windows\win-x86"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

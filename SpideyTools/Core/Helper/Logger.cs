@@ -21,7 +21,7 @@ namespace SpideyTools.Core.Helper
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    debugs.Add(message);
+                    debugs.Add($"[{memberName}]: {message}");
                 });
             }
 
